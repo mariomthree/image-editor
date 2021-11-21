@@ -1,6 +1,12 @@
 package Controller;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -40,10 +46,34 @@ public class ImageControllerTest {
     }
 
     @Test
+    public void rotateLeft90BufferedImageTest() {
+        try {
+            ImageInputStream imageInputStream = ImageIO.createImageInputStream(input);
+            BufferedImage image = ImageIO.read(imageInputStream);
+            BufferedImage result = imageController.rotate90(image, ImageController.ROTATE_LEFT);
+            assertNotNull(result);
+        } catch (IOException ex) {
+            Logger.getLogger(ImageControllerTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Test
     public void rotateRight90Test() {
         File outputRight90 = new File("test\\images\\arvore-rotate90-right.png");
         boolean result = imageController.rotate90(input, outputRight90, ImageController.ROTATE_RIGHT);
         assertTrue(result);
+    }
+
+    @Test
+    public void rotateRight90BufferedImageTest() {
+        try {
+            ImageInputStream imageInputStream = ImageIO.createImageInputStream(input);
+            BufferedImage image = ImageIO.read(imageInputStream);
+            BufferedImage result = imageController.rotate90(image, ImageController.ROTATE_RIGHT);
+            assertNotNull(result);
+        } catch (IOException ex) {
+            Logger.getLogger(ImageControllerTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Test
@@ -54,6 +84,18 @@ public class ImageControllerTest {
     }
 
     @Test
+    public void rotate180BufferedImageTest() {
+        try {
+            ImageInputStream imageInputStream = ImageIO.createImageInputStream(input);
+            BufferedImage image = ImageIO.read(imageInputStream);
+            BufferedImage result = imageController.rotate180(image);
+            assertNotNull(result);
+        } catch (IOException ex) {
+            Logger.getLogger(ImageControllerTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Test
     public void scaleTest() {
         File outputScale = new File("test\\images\\arvore-scale.png");
         boolean result = imageController.scale(input, outputScale, 100, 100);
@@ -61,10 +103,34 @@ public class ImageControllerTest {
     }
 
     @Test
+    public void scaleBufferedImageTest() {
+        try {
+            ImageInputStream imageInputStream = ImageIO.createImageInputStream(input);
+            BufferedImage image = ImageIO.read(imageInputStream);
+            BufferedImage result = imageController.scale(image, 100, 100);
+            assertNotNull(result);
+        } catch (IOException ex) {
+            Logger.getLogger(ImageControllerTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Test
     public void cropTest() {
         File outputCrop = new File("test\\images\\arvore-crop.png");
         boolean result = imageController.crop(input, outputCrop, 0, 50, 200, 200);
         assertTrue(result);
+    }
+
+    @Test
+    public void cropBufferedImageTest() {
+        try {
+            ImageInputStream imageInputStream = ImageIO.createImageInputStream(input);
+            BufferedImage image = ImageIO.read(imageInputStream);
+            BufferedImage result = imageController.crop(image, 0, 50, 100, 100);
+            assertNotNull(result);
+        } catch (IOException ex) {
+            Logger.getLogger(ImageControllerTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

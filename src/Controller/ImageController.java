@@ -55,6 +55,52 @@ public class ImageController {
         }
     }
 
+    public BufferedImage rotate90(File input, int direction) {
+        try {
+            this.imageInputStream = ImageIO.createImageInputStream(input);
+            this.iterator = ImageIO.getImageReaders(imageInputStream);
+            this.imageReader = iterator.next();
+
+            BufferedImage image = ImageIO.read(imageInputStream);
+            int imageWidth = image.getWidth();
+            int imageHeight = image.getHeight();
+            BufferedImage rotatedImage = new BufferedImage(imageHeight, imageWidth, image.getType());
+
+            for (int y = 0; y < imageHeight; y++) {
+                for (int x = 0; x < imageWidth; x++) {
+                    if (direction == ROTATE_LEFT) {
+                        rotatedImage.setRGB(y, (imageWidth - 1) - x, image.getRGB(x, y));
+                    } else {
+                        rotatedImage.setRGB((imageHeight - 1) - y, x, image.getRGB(x, y));
+                    }
+                }
+            }
+
+            return rotatedImage;
+        } catch (IOException ex) {
+            this.isError = true;
+            this.error = ex.getMessage();
+            return null;
+        }
+    }
+
+    public BufferedImage rotate90(BufferedImage image, int direction) {
+        int imageWidth = image.getWidth();
+        int imageHeight = image.getHeight();
+        BufferedImage rotatedImage = new BufferedImage(imageHeight, imageWidth, image.getType());
+
+        for (int y = 0; y < imageHeight; y++) {
+            for (int x = 0; x < imageWidth; x++) {
+                if (direction == ROTATE_LEFT) {
+                    rotatedImage.setRGB(y, (imageWidth - 1) - x, image.getRGB(x, y));
+                } else {
+                    rotatedImage.setRGB((imageHeight - 1) - y, x, image.getRGB(x, y));
+                }
+            }
+        }
+        return rotatedImage;
+    }
+
     public boolean rotate180(File input, File Output) {
         try {
             this.imageInputStream = ImageIO.createImageInputStream(input);
@@ -80,6 +126,19 @@ public class ImageController {
         }
     }
 
+    public BufferedImage rotate180(BufferedImage image) {
+        int imageWidth = image.getWidth();
+        int imageHeight = image.getHeight();
+        BufferedImage rotatedImage = new BufferedImage(imageWidth, imageHeight, image.getType());
+
+        for (int y = 0; y < imageHeight; y++) {
+            for (int x = 0; x < imageWidth; x++) {
+                rotatedImage.setRGB((imageWidth - 1) - x, (imageHeight - 1) - y, image.getRGB(x, y));
+            }
+        }
+        return rotatedImage;
+    }
+
     public boolean scale(File input, File Output, int width, int height) {
         try {
             this.imageInputStream = ImageIO.createImageInputStream(input);
@@ -101,29 +160,14 @@ public class ImageController {
         }
     }
 
-    public boolean scale(File input, File Output, int n) {
-        try {
-            this.imageInputStream = ImageIO.createImageInputStream(input);
-            this.iterator = ImageIO.getImageReaders(imageInputStream);
-            this.imageReader = iterator.next();
+    public BufferedImage scale(BufferedImage originalImage, int width, int height) {
 
-            BufferedImage image = ImageIO.read(imageInputStream);
-            int imageWidth = n * image.getWidth();
-            int imageHeight = n * image.getHeight();
-            BufferedImage enlargedImage = new BufferedImage(imageWidth, imageHeight, image.getType());
-
-            for (int y = 0; y < imageHeight; ++y) {
-                for (int x = 0; x < imageWidth; ++x) {
-                    enlargedImage.setRGB(x, y, image.getRGB(x / n, y / n));
-                }
-            }
-
-            return ImageIO.write(enlargedImage, imageReader.getFormatName(), Output);
-        } catch (IOException ex) {
-            this.isError = true;
-            this.error = ex.getMessage();
-            return false;
-        }
+        BufferedImage resizedImage = new BufferedImage(width, height, originalImage.getType());
+        Graphics2D graphics2D = resizedImage.createGraphics();
+        graphics2D.drawImage(originalImage, 0, 0, width, height, null);
+        graphics2D.dispose();
+        
+        return resizedImage;
     }
 
     public boolean crop(File input, File Output, int x, int y, int width, int height) {
@@ -143,8 +187,12 @@ public class ImageController {
         }
     }
 
-    public static void translate() {
+    public BufferedImage crop(BufferedImage image, int x, int y, int width, int height) {
+        if (image.getHeight() == height || image.getWidth() == width) {
+            return image;
+        }
 
+        return image.getSubimage(x, y, width, height);
     }
 
     public String getError() {
