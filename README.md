@@ -11,3 +11,5 @@ O editor permite efectuar as seguintes operações.
 - Escala
 
 ## Demonstração
+
+<img src="demo.jpg"/> 
