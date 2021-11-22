@@ -166,7 +166,7 @@ public class ImageController {
         Graphics2D graphics2D = resizedImage.createGraphics();
         graphics2D.drawImage(originalImage, 0, 0, width, height, null);
         graphics2D.dispose();
-        
+
         return resizedImage;
     }
 
@@ -188,7 +188,7 @@ public class ImageController {
     }
 
     public BufferedImage crop(BufferedImage image, int x, int y, int width, int height) {
-        if (image.getHeight() == height || image.getWidth() == width) {
+        if (height >= image.getHeight() || width >= image.getWidth()) {
             return image;
         }
 
