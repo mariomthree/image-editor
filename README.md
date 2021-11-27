@@ -9,6 +9,7 @@ O editor permite efectuar as seguintes operações.
 - Rotação (180°, 90° para esquerda e direita)
 - Corte de imagem
 - Escala
+- Translação
 
 ## Demonstração
 
